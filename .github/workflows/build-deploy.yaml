@@ -20,7 +20,7 @@ jobs:
         continue-on-error: true
 
       - name: Generate lockfile
-        run: npm -i --package-lock-only
+        run: npm i --package-lock-only
 
       - name: Check for vulnerabilities using NPM Audit
         run: npm audit

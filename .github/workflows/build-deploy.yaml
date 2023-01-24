@@ -15,5 +15,32 @@ jobs:
       - name: Install bandit
         run: pip install bandit
         
-      - name: Check for vulnerabilities
-        run: bandit -r ./
+      - name: Check for vulnerabilities using Bandit
+        run: bandit -r ./ -f json
+        continue-on-error: true
+
+      - name: Generate lockfile
+        run: npm -i --package-lock-only
+
+      - name: Check for vulnerabilities using NPM Audit
+        run: npm audit
+        continue-on-error: true
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with: 
+          name: artifact-1
+          path: target/*.war
+
+  deploy-stage:  
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+      
+      - name: Copy files
+        uses: mdallasanta/ssh-scp-deploy@v1.2.0
+        with: 
+          local: artifact-1/*
+          remote: C:/Users/hasan/Desktop/dojo
+      

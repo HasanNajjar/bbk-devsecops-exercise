@@ -1,0 +1,19 @@
+name: Build and check for vulnerabilities
+on:
+  push: 
+    branches: 
+      - main
+  workflow_dispatch: 
+
+jobs:
+  build-stage:
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Clone the code
+        uses: actions/checkout@v3
+        
+      - name: Install bandit
+        run: pip install bandit
+        
+      - name: Check for vulnerabilities
+        run: bandit -r ./
